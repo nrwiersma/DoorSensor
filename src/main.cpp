@@ -21,7 +21,8 @@
 #define sendPin 3
 #define ledPin 13
 #define sensorPin 10
-#define pollInt 600000L
+#define pollIntMin 400000L
+#define pollIntMax 600000L
 
 RCSwitch mySwitch = RCSwitch();
 StableState state = StableState();
@@ -58,7 +59,7 @@ void setup() {
 }
 
 void loop() {
-  if (state.add(digitalRead(sensorPin)) || millis() - lastSent > pollInt) {
+  if (state.add(digitalRead(sensorPin)) || millis() - lastSent > random(pollIntMin, pollIntMax)) {
     uint32_t code = getCode(state.get());
     mySwitch.send(code, 24);
     lastSent = millis();
